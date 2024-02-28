@@ -1,0 +1,33 @@
+{% extends 'homepage.html' %}
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .navbar .form-inline {
+            display: flex;
+            justify-content: flex-end;
+        }
+    </style>
+    <link rel="stylesheet" href="{{url_for('static',filename='addnotes.css')}}">
+
+ {% block content %}
+    <div class="container">
+        <h1>View notes</h1>
+        {% for i in data1 %}
+        <label for="titleField">Title:</label>
+        <input type="text" id="titleField" name="title" value="{{i[0]}}" readonly />
+
+        <label for="contentField">Content:</label>
+        <textarea id="contentField" class="content-field" name="content" value="" readonly>{{i[1]}}</textarea>
+        <a href="{{url_for('allnotes')}}"><button>back</button></a>
+        {% endfor %}
+    </div>
+   
+
+    <!-- Add Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+{% endblock content %}
+
+</html>

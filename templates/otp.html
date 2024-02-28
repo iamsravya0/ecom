@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+<body>
+    <center>
+        <form method="POST" action="{{url_for('otp',username=username,password=password,email=email,otp=otp)}}">
+            <h1>Enter the otp has sent you through email</h1>
+            <input type="text" name="otp" placeholder="Enter otp"/><br/>
+            <button>Signup</button>
+        </form>
+    </center>
+</body>
+</html>
