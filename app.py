@@ -9,8 +9,19 @@ app=Flask(__name__)
 app.config['SESSION_TYPE']='filesystem'
 excel.init_excel(app)
 Session(app)
-mydb=mysql.connector.connect(host="localhost",user="root",password="Sravya99@",db='prm')
+# mydb=mysql.connector.connect(host="localhost",user="root",password="Sravya99@",db='prm')
 app.secret_key='sravya99@codegnan'
+user=os.environ.get('RDS_USERNAME')
+db=os.environ.get('RDS_DB_NAME')
+password=os.environ.get('RDS_PASSWORD')
+host=os.environ.get('RDS_HOSTNAME')
+port=os.environ.get('RDS_PORT')
+with mysql.connector.connect(host=host,port=port,user=user,password=password,db=db) as conn:
+    cursor=conn.cursor()
+    cursor.execute('create table if not exists register(username varchar(50) NOT NULL,password varchar(15) DEFAULT NULL,email varchar(60) DEFAULT NULL,PRIMARY KEY (username),UNIQUE KEY email (email))')
+    cursor.execute('create table if not exists notes(notes_id int NOT NULL AUTO_INCREMENT,title varchar(100) NOT NULL,content text NOT NULL,username varchar(50) NOT NULL,PRIMARY KEY (notes_id), KEY username (username),FOREIGN KEY (username) REFERENCES register (username))')
+    cursor.execute('create table if not exists files files` (fid int NOT NULL AUTO_INCREMENT,extension varchar(10) DEFAULT NULL,filedata longblob,added_by varchar(50) DEFAULT NULL,PRIMARY KEY (fid),KEY added_by (added_by),CONSTRAINT files_ibfk_1 FOREIGN KEY (added_by) REFERENCES register (username))')
+mydb=mysql.connector.connect(host=host,port=port,user=user,password=password,db=db)
 @app.route('/')
 def home():
      return render_template('title.html')
@@ -246,4 +257,4 @@ def delete_file(fid):
         return redirect(url_for('allfiles'))
     return redirect(url_for('login'))
 if __name__ == '__main__':
-    app.run(debug=True,use_reloader=True)
+    app.run()
